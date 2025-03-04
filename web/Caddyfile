@@ -1,0 +1,29 @@
+# Caddyfile for podscript web server development.
+#
+# For the backend server, we proxy requests to the Go backend server running on port 5170.
+#
+# For the frontend app, we proxy to the Vite dev server running on port 5173.
+#
+# To run the web server, do the following:
+#
+# - npm run dev in the frontend directory
+# - podscript web --dev in the backend directory
+# - caddy run
+#
+# Then you can access the web server at http://localhost:8080
+:8080 {
+	# Define a path matcher for the backend API routes
+	@paths {
+		path_regexp ^/(settings|models.*|audio|ytt)$
+	}
+
+	# Handle all backend API routes - proxy to Go backend server
+	handle @paths {
+		reverse_proxy localhost:5170
+	}
+
+	# Handle all other routes - proxy to Vite dev server
+	handle {
+		reverse_proxy localhost:5173
+	}
+}

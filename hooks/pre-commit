@@ -1,0 +1,83 @@
+#!/bin/bash
+set -euo pipefail
+
+# Function to scan for secrets in staged files
+scan_for_secrets() {
+    echo "🔒 Scanning for secrets in staged files..."
+    
+    # Check if ggshield is installed
+    if command -v ggshield &> /dev/null; then
+        echo "Using ggshield for secret scanning"
+        ggshield secret scan pre-commit
+    else
+        echo "⚠️ ggshield not found. Falling back to basic pattern matching."
+        echo "💡 Consider installing ggshield for better secret detection: https://docs.gitguardian.com/ggshield-docs/getting-started"
+        
+        # Basic pattern matching for common API keys
+        FOUND_SECRETS=false
+        
+        # Get all staged files
+        FILES=$(git diff --cached --name-only)
+        
+        # Define patterns to search for
+        PATTERNS=(
+            "OPENAI_API_KEY\s*=\s*[\"']sk-[a-zA-Z0-9]{20,}[\"']"
+            "DEEPGRAM_API_KEY\s*=\s*[\"'][a-zA-Z0-9]{20,}[\"']"
+            "GROQ_API_KEY\s*=\s*[\"']gsk_[a-zA-Z0-9]{20,}[\"']"
+            "ASSEMBLYAI_API_KEY\s*=\s*[\"'][a-zA-Z0-9]{20,}[\"']"
+            "ANTHROPIC_API_KEY\s*=\s*[\"'][a-zA-Z0-9]{20,}[\"']"
+            "GEMINI_API_KEY\s*=\s*[\"'][a-zA-Z0-9]{20,}[\"']"
+            "AWS_ACCESS_KEY_ID\s*=\s*[\"'][A-Z0-9]{20,}[\"']"
+            "AWS_SECRET_ACCESS_KEY\s*=\s*[\"'][a-zA-Z0-9/+]{20,}[\"']"
+        )
+        
+        for FILE in $FILES; do
+            # Skip binary files and .git directory
+            if [[ -f "$FILE" && "$FILE" != .git/* && $(file -b --mime-type "$FILE") == text/* ]]; then
+                for PATTERN in "${PATTERNS[@]}"; do
+                    if grep -E "$PATTERN" "$FILE" > /dev/null; then
+                        echo "❌ Potential API key found in $FILE"
+                        FOUND_SECRETS=true
+                    fi
+                done
+            fi
+        done
+        
+        if [ "$FOUND_SECRETS" = true ]; then
+            echo "❌ Commit rejected: API keys detected in staged files"
+            echo "Please remove the API keys before committing"
+            return 1
+        fi
+    fi
+    
+    echo "✅ No secrets detected in staged files"
+    return 0
+}
+
+# Scan for secrets first
+scan_for_secrets || exit 1
+
+# Check if there are changes in web/frontend
+if git diff --cached --quiet web/frontend/; then
+    exit 0
+fi
+
+echo "Frontend changes detected. Building and copying dist..."
+
+CURRENT_DIR=$(pwd)
+
+# Navigate to frontend dir and run build
+cd web/frontend
+npm run build
+
+cd "$CURRENT_DIR"
+
+# Stage the new dist files that were outputted by vite
+git add dist/
+
+# Run final secret scan on the newly generated files
+echo "Running final secret scan on generated files..."
+scan_for_secrets || exit 1
+
+echo "✅ Pre-commit checks passed"
+exit 0
