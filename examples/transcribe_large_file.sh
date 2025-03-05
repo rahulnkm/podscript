@@ -185,12 +185,12 @@ else
         if [ "$i" -lt "$CHUNK_COUNT" ]; then
             CHUNK_FILE="$CHUNKS_DIR/chunk_${i}.mp3"
             echo "🔪 Creating chunk $i: Starting at $START_TIME seconds for $CHUNK_DURATION seconds"
-            ffmpeg -v quiet -y -i "$AUDIO_FILE" -ss "$START_TIME" -t "$CHUNK_DURATION" -acodec libmp3lame -b:a 128k "$CHUNK_FILE"
+            ffmpeg -nostdin -v quiet -y -i "$AUDIO_FILE" -ss "$START_TIME" -t "$CHUNK_DURATION" -acodec libmp3lame -b:a 128k "$CHUNK_FILE"
         else
             # For the last chunk, don't specify duration to get the remainder of the file
             CHUNK_FILE="$CHUNKS_DIR/chunk_${i}.mp3"
             echo "🔪 Creating final chunk $i: Starting at $START_TIME seconds until the end"
-            ffmpeg -v quiet -y -i "$AUDIO_FILE" -ss "$START_TIME" -acodec libmp3lame -b:a 128k "$CHUNK_FILE"
+            ffmpeg -nostdin -v quiet -y -i "$AUDIO_FILE" -ss "$START_TIME" -acodec libmp3lame -b:a 128k "$CHUNK_FILE"
         fi
         
         # Check chunk size

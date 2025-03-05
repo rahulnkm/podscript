@@ -1,0 +1,13 @@
+# Sample sources file for media_transcriber.sh
+# Format: One URL per line
+# Lines starting with # are comments and will be ignored
+# You can include both podcast RSS feeds and YouTube URLs
+
+# Podcast RSS feeds
+https://feeds.megaphone.fm/vergecast
+
+# YouTube videos
+https://www.youtube.com/watch?v=JfknibBat2A
+
+# YouTube channels/playlists
+# https://www.youtube.com/playlist?list=PL590L5WQmH8dvW0-OjXSaQq9D8ifnk4WC

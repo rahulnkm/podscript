@@ -1,51 +1,46 @@
-# Podscript Example Scripts
+# Media Transcription Scripts
 
-This directory contains example scripts that demonstrate how to use Podscript for various transcription scenarios.
+This directory contains scripts for transcribing media from various sources using OpenAI's Whisper API.
 
-## Basic Examples
+## Main Script
 
-- `whisper_example.sh`: Transcribe a local audio file using OpenAI Whisper
-- `whisper_url_example.sh`: Download and transcribe audio from a URL
+### Media Transcriber
 
-## Advanced Examples
+**`media_transcriber.sh`**: A comprehensive script that can process podcasts, YouTube videos, and YouTube channels
 
-### Handling Large Files
+```bash
+./media_transcriber.sh --source <url> [--language <lang>] [--prompt <prompt>] [--limit <num>] [--api-key <key>]
+```
 
-OpenAI's Whisper API has a 25MB file size limit. We provide several scripts to help you work with larger files:
+This script:
+- Automatically detects the source type (podcast or YouTube)
+- Downloads and transcribes content
+- Organizes transcripts in the `podcast-transcripts` directory
+- Creates metadata files with source information
 
-1. **`transcribe_large_file.sh`**: Automatically splits large files into smaller chunks and transcribes them
+#### Examples:
+
+```bash
+# Process a podcast RSS feed
+./media_transcriber.sh --source https://feeds.megaphone.fm/vergecast --language en --prompt "Tech podcast" --limit 5
+
+# Process a YouTube video
+./media_transcriber.sh --source "https://www.youtube.com/watch?v=example" --language en
+
+# Process multiple sources from a file
+./media_transcriber.sh --file sample_sources.txt --language en --limit 3
+```
+
+## Supporting Scripts
+
+1. **`transcribe_large_file.sh`**: Handles large audio files by splitting them into smaller chunks
    ```bash
-   ./transcribe_large_file.sh https://example.com/large-podcast.mp3 --language en --prompt "Podcast about technology"
+   ./transcribe_large_file.sh large-podcast.mp3 --language en --prompt "Podcast about technology"
    ```
 
-2. **`compress_audio.sh`**: Compresses audio files to reduce their size while maintaining reasonable quality
+2. **`compress_audio.sh`**: Compresses audio files to reduce their size
    ```bash
    ./compress_audio.sh large_podcast.mp3 64
-   ```
-
-3. **`download_and_transcribe.sh`**: Downloads audio from a URL and transcribes it
-   ```bash
-   ./download_and_transcribe.sh https://example.com/podcast.mp3 --language en --prompt "Podcast about science"
-   ```
-
-### Podcast Processing
-
-4. **`podcast_transcriber.sh`**: Downloads and transcribes all episodes from a podcast RSS feed
-   ```bash
-   ./podcast_transcriber.sh https://example.com/podcast.rss --language en --prompt "Tech podcast" --limit 5
-   ```
-   
-   This script:
-   - Parses a podcast RSS feed to extract episode information
-   - Downloads and transcribes each episode using `transcribe_large_file.sh`
-   - Organizes transcripts in the `podcast-transcripts` directory
-   - Creates metadata files with podcast information
-
-### Configuration Examples
-
-- **`transcribe_with_config.sh`**: Explicitly loads the OpenAI API key from the configuration file
-   ```bash
-   ./transcribe_with_config.sh https://example.com/podcast.mp3 --language en --prompt "Podcast about history"
    ```
 
 ## Usage Tips
@@ -55,27 +50,15 @@ OpenAI's Whisper API has a 25MB file size limit. We provide several scripts to h
    chmod +x script_name.sh
    ```
 
-2. All scripts support optional language and prompt parameters using named arguments:
+2. All scripts support optional language and prompt parameters:
    ```bash
    ./script_name.sh input_file.mp3 --language en --prompt "Context for better transcription"
    ```
 
-3. For URL-based scripts, the audio will be downloaded to a temporary location and cleaned up automatically
-
-4. Transcripts are saved to the current working directory by default
-
 ## Dependencies
 
-Some scripts require additional tools:
-
-- **ffmpeg**: Required for `transcribe_large_file.sh` and `compress_audio.sh`
-  ```bash
-  # Install on macOS
-  brew install ffmpeg
-  
-  # Install on Ubuntu
-  sudo apt-get install ffmpeg
-  ```
+- **curl, xmllint, ffmpeg**: Required for all sources
+- **yt-dlp**: Required for YouTube sources (`pip install yt-dlp`)
 
 ## Troubleshooting
 
@@ -83,12 +66,5 @@ If you encounter issues:
 
 1. Check that your OpenAI API key is correctly configured
 2. Ensure all dependencies are installed
-3. Verify that the audio file is in a supported format
-4. For large files, try using `compress_audio.sh` first before attempting to transcribe
-
-## Additional Resources
-
-For more information, see the documentation:
-
-- `docs/openai_whisper.md`: General usage of OpenAI Whisper with Podscript
-- `docs/handling_large_files.md`: Detailed guide on working with large audio files
+3. Verify that the URL or file is accessible
+4. For large files, the script automatically handles splitting
