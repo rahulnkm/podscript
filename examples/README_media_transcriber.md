@@ -103,7 +103,6 @@ You can provide your OpenAI API key in several ways:
 1. **Command-line option**: `--api-key <your-api-key>`
 2. **Environment variable**: `export OPENAI_API_KEY=your-api-key`
 3. **.env file**: Create a `.env` file in the project root with `OPENAI_API_KEY=your-api-key`
-4. **Configuration command**: Run `./podscript configure` to set up your API key
 
 ## Troubleshooting
 
