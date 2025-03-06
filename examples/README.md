@@ -15,7 +15,7 @@ This directory contains scripts for transcribing media from various sources usin
 This script:
 - Automatically detects the source type (podcast or YouTube)
 - Downloads and transcribes content
-- Organizes transcripts in the `podcast-transcripts` directory
+- Organizes transcripts in the `transcripts` directory
 - Creates metadata files with source information
 
 #### Examples:

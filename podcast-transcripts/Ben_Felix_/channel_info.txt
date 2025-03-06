@@ -1,4 +1,0 @@
-Channel: Ben Felix
-Processing Date: Wed Mar  5 02:34:12 EST 2025
-Language: en
-Prompt: 'Not specified'

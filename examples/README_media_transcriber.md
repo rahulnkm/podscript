@@ -82,10 +82,10 @@ The `media_transcriber.sh` script is a unified tool for downloading and transcri
 
 ## Output
 
-Transcripts are saved in the `podcast-transcripts` directory, organized by podcast/channel name:
+Transcripts are saved in the `transcripts` directory, organized by podcast/channel name:
 
 ```
-podcast-transcripts/
+transcripts/
 ├── The_Vergecast_/
 │   ├── Episode_Title_1.txt
 │   ├── Episode_Title_2.txt

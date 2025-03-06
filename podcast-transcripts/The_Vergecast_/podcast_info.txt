@@ -1,6 +1,0 @@
-Podcast Title: The Vergecast
-RSS Feed: https://feeds.megaphone.fm/vergecast
-Episodes Processed: 1
-Processing Date: Wed Mar  5 02:41:25 EST 2025
-Language: en
-Prompt: 'Not specified'

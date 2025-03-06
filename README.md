@@ -97,7 +97,7 @@ This offers efficient processing of large files with excellent parallelization a
 Transcripts are organized in a consistent directory structure:
 
 ```
-podcast-transcripts/
+transcripts/
 ├── Podcast_Name/
 │   ├── podcast_info.txt
 │   ├── Episode_Title_1/

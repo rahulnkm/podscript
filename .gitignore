@@ -32,3 +32,39 @@ scratch.go
 .env
 *.env
 .env.*
+
+
+
+# Build and output directories
+target/
+transcripts/
+dist/
+
+# Backup and temporary files
+backup/
+*.bak
+*.tmp
+*.temp
+*~
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Debug files
+*.log
+*.debug
+
+# Binary files
+*.bin
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Local development files
+config.local.js
+*.local.*

@@ -285,7 +285,7 @@ process_podcast_source() {
     echo "📂 Podcast Title: $PODCAST_TITLE"
     
     # Create podcast directory in podcast-transcripts
-    PODCAST_DIR="/Users/rahulnandakumar/Desktop/code/podscript/podcast-transcripts/$PODCAST_DIR_NAME"
+    PODCAST_DIR="/Users/rahulnandakumar/Desktop/code/podscript/transcripts/$PODCAST_DIR_NAME"
     mkdir -p "$PODCAST_DIR"
     echo "📁 Created directory: $PODCAST_DIR"
     
@@ -553,7 +553,7 @@ process_youtube_source() {
         echo "📂 Channel/Playlist: $CHANNEL_NAME"
         
         # Create directory for this channel
-        CHANNEL_DIR="/Users/rahulnandakumar/Desktop/code/podscript/podcast-transcripts/$CHANNEL_NAME"
+        CHANNEL_DIR="/Users/rahulnandakumar/Desktop/code/podscript/transcripts/$CHANNEL_NAME"
         mkdir -p "$CHANNEL_DIR"
         echo "📁 Created directory: $CHANNEL_DIR"
         
@@ -715,7 +715,7 @@ process_youtube_source() {
         SAFE_CHANNEL=$(echo "$CHANNEL" | tr -cd '[:alnum:][:space:]' | tr '[:space:]' '_')
         
         # Create directory for this channel
-        CHANNEL_DIR="/Users/rahulnandakumar/Desktop/code/podscript/podcast-transcripts/$SAFE_CHANNEL"
+        CHANNEL_DIR="/Users/rahulnandakumar/Desktop/code/podscript/transcripts/$SAFE_CHANNEL"
         mkdir -p "$CHANNEL_DIR"
         echo "📁 Created directory: $CHANNEL_DIR"
         
