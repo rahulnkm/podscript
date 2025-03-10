@@ -5,29 +5,32 @@ use log::{error, info};
 use std::path::PathBuf;
 
 mod config;
+mod local_file;
 mod podcast;
 mod transcription;
 mod utils;
 mod youtube;
 
 use config::Config;
+use local_file::LocalFileProcessor;
 use podcast::PodcastProcessor;
 use youtube::YouTubeProcessor;
 
-/// Media Transcriber - A fast tool for transcribing podcasts and YouTube videos
+/// Media Transcriber - A fast tool for transcribing podcasts, YouTube videos, and local MP3 files
 /// 
 /// This application can process:
 /// 1. Podcast RSS feeds - extracting all episodes, transcribing them
 /// 2. YouTube channels/playlists - extracting videos, transcribing them
 /// 3. Individual YouTube videos - transcribing a single video
-/// 4. Multiple sources at once - processing a list of feeds/channels
+/// 4. Local MP3 files - transcribing files from your local filesystem
+/// 5. Multiple sources at once - processing a list of feeds/channels/files
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
     #[command(subcommand)]
     command: Option<Commands>,
 
-    /// URL of a podcast RSS feed or YouTube channel/video
+    /// URL of a podcast RSS feed, YouTube channel/video, or path to a local MP3 file
     #[arg(short, long, conflicts_with = "file")]
     source: Option<String>,
 
@@ -124,7 +127,7 @@ fn init_logger(verbose: bool) {
 /// Print welcome message
 fn print_welcome() {
     println!("{}", "🎙️  Media Transcriber - Rust Edition 🎙️".green().bold());
-    println!("{}", "A fast tool for transcribing podcasts and YouTube videos".bright_blue());
+    println!("{}", "A fast tool for transcribing podcasts, YouTube videos, and local MP3 files".bright_blue());
     println!();
 }
 
@@ -135,12 +138,19 @@ async fn configure() -> Result<()> {
     Ok(())
 }
 
-/// Process a single source (podcast or YouTube)
+/// Process a single source (podcast, YouTube, or local file)
 async fn process_single_source(source_url: &str, config: &Config) -> Result<()> {
     info!("Processing source: {}", source_url);
     
-    // Detect source type
-    if source_url.contains("youtube.com") || source_url.contains("youtu.be") {
+    // Check if it's a local file path
+    if LocalFileProcessor::is_local_file_path(source_url) {
+        // Process local file
+        info!("Detected local file: {}", source_url);
+        let local_file_processor = LocalFileProcessor::new(config);
+        local_file_processor.process(source_url).await?;
+    }
+    // Detect YouTube source
+    else if source_url.contains("youtube.com") || source_url.contains("youtu.be") {
         // Process YouTube source
         let youtube_processor = YouTubeProcessor::new(config);
         youtube_processor.process(source_url).await?;

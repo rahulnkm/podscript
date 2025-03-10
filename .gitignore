@@ -68,3 +68,4 @@ backup/
 # Local development files
 config.local.js
 *.local.*
+test-files/

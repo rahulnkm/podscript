@@ -1,5 +1,7 @@
 # Media Transcriber
 
+**Local files**: ./target/release/media-transcriber --source /path/to/your/audio.mp3
+
 A streamlined tool to transcribe any audio or video media from various sources using OpenAI's Whisper API. This tool can process podcast RSS feeds, YouTube videos, YouTube channels, and more.
 
 ## Overview
@@ -9,6 +11,7 @@ This tool provides high-performance transcription services using a Rust implemen
 - Processes podcast RSS feeds - downloading and transcribing all episodes
 - Processes YouTube videos - transcribing individual videos
 - Processes YouTube channels/playlists - transcribing all videos from a channel
+- Processes local MP3 files - transcribing audio files from your local filesystem
 - Processes multiple sources at once from a sources file
 
 All transcriptions are performed using OpenAI's Whisper API, which provides high-quality multilingual transcription.
@@ -41,6 +44,9 @@ cd rust-transcriber
 
 # Process a YouTube video
 ./target/release/media-transcriber --source https://www.youtube.com/watch?v=VIDEO_ID
+
+# Process a local MP3 file
+./target/release/media-transcriber --source /path/to/your/audio.mp3
 
 # Process with language and prompt specification
 ./target/release/media-transcriber --source URL --language en --prompt "Tech podcast"
@@ -104,13 +110,17 @@ transcripts/
 │   │   └── transcript.txt
 │   └── Episode_Title_2/
 │       └── transcript.txt
-└── YouTube_Channel/
-    ├── channel_info.txt
-    ├── Video_Title_1/
-    │   ├── video_info.txt
-    │   └── transcript.txt
-    └── Video_Title_2/
-        ├── video_info.txt
+├── YouTube_Channel/
+│   ├── channel_info.txt
+│   ├── Video_Title_1/
+│   │   ├── video_info.txt
+│   │   └── transcript.txt
+│   └── Video_Title_2/
+│       ├── video_info.txt
+│       └── transcript.txt
+└── local_files/
+    └── Audio_File_Name/
+        ├── file_info.txt
         └── transcript.txt
 ```
 
